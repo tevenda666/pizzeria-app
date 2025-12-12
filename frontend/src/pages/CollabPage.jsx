@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CollabList from '../components/CollabList.jsx';
-import { parseJsonSafe } from '../utils/api.js';
+import { apiFetch, parseJsonSafe } from '../utils/api.js';
 
 export default function CollabPage({ collab, setCollab, orders, onUpdate }) {
   const [creds, setCreds] = useState({ documento: '', password: '' });
@@ -10,7 +10,7 @@ export default function CollabPage({ collab, setCollab, orders, onUpdate }) {
   const login = async () => {
     setError('');
     try {
-      const res = await fetch('/v1/auth/login', {
+      const res = await apiFetch('/v1/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ documento: creds.documento, password: creds.password })

@@ -4,7 +4,7 @@ import CatalogPage from './pages/CatalogPage.jsx';
 import OrdersPage from './pages/OrdersPage.jsx';
 import CollabPage from './pages/CollabPage.jsx';
 import { ProductModal, ConfirmationModal } from './components/Modals.jsx';
-import { parseJsonSafe } from './utils/api.js';
+import { apiFetch, parseJsonSafe } from './utils/api.js';
 
 const pizzaImage = '/pizza.gif';
 const drinkImage = '/bebida.gif';
@@ -53,7 +53,7 @@ export default function App() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch('/v1/orders/products');
+      const res = await apiFetch('/v1/orders/products');
       if (!res.ok) throw new Error('catálogo no disponible');
       const data = await parseJsonSafe(res);
       const mapped = (data.items || []).map((p) => ({
@@ -68,7 +68,7 @@ export default function App() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch('/v1/orders');
+      const res = await apiFetch('/v1/orders');
       const data = await parseJsonSafe(res);
       setOrders(data.items || []);
     } catch (_err) {
@@ -111,7 +111,7 @@ export default function App() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/v1/orders', {
+      const res = await apiFetch('/v1/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -141,7 +141,7 @@ export default function App() {
 
   const updateStatus = async (orderId, estado) => {
     try {
-      const res = await fetch(`/v1/orders/${orderId}/status`, {
+      const res = await apiFetch(`/v1/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ estado })
